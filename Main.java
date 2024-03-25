@@ -1,11 +1,11 @@
 import java.util.Scanner;
 
-// Abstract Factory Pattern
+// In this code i have implemented using abstract factory pattern
 interface VehicleFactory {
     Vehicle createVehicle();
 }
 
-// Concrete Factory for Tata vehicles
+// creating Concrete Factory for Tata cars
 class TataFactory implements VehicleFactory {
     private String model;
 
@@ -14,6 +14,7 @@ class TataFactory implements VehicleFactory {
     }
 
     @Override
+    // using ignore case reagardless what user types it will not throw an exception
     public Vehicle createVehicle() {
         if (model.equalsIgnoreCase("Altroz")) {
             return new Altroz();
@@ -21,13 +22,15 @@ class TataFactory implements VehicleFactory {
             return new Nexon();
         } else if (model.equalsIgnoreCase("Tiago")) {
             return new Tiago();
+        } else if (model.equalsIgnoreCase("Harrier")) {
+            return new Harrier();
         } else {
             throw new IllegalArgumentException("Invalid Tata car model: " + model);
         }
     }
 }
 
-// Product interface
+// Creating and interface for product
 interface Vehicle {
     void configure(String trim, String paint, String wheels);
     void displaySpecifications();
@@ -48,7 +51,7 @@ class Altroz implements Vehicle {
 
     @Override
     public void displaySpecifications() {
-        System.out.println("Altroz Specifications:");
+        System.out.println("Following are the specifications selected by you for Altroz:");
         System.out.println("Trim: " + trim);
         System.out.println("Paint: " + paint);
         System.out.println("Wheels: " + wheels);
@@ -69,7 +72,7 @@ class Nexon implements Vehicle {
 
     @Override
     public void displaySpecifications() {
-        System.out.println("Nexon Specifications:");
+        System.out.println("Following are the specifications selected by you for Nexon:");
         System.out.println("Trim: " + trim);
         System.out.println("Paint: " + paint);
         System.out.println("Wheels: " + wheels);
@@ -90,14 +93,35 @@ class Tiago implements Vehicle {
 
     @Override
     public void displaySpecifications() {
-        System.out.println("Tiago Specifications:");
+        System.out.println("Following are the specifications selected by you for Tiago:");
         System.out.println("Trim: " + trim);
         System.out.println("Paint: " + paint);
         System.out.println("Wheels: " + wheels);
     }
 }
 
-// Builder Pattern: Director
+class Harrier implements Vehicle {
+    private String trim;
+    private String paint;
+    private String wheels;
+
+    @Override
+    public void configure(String trim, String paint, String wheels) {
+        this.trim = trim;
+        this.paint = paint;
+        this.wheels = wheels;
+    }
+
+    @Override
+    public void displaySpecifications() {
+        System.out.println("Following are the specifications selected by you for Harrier:");
+        System.out.println("Trim: " + trim);
+        System.out.println("Paint: " + paint);
+        System.out.println("Wheels: " + wheels);
+    }
+}
+
+// implementing builder pattern
 class VehicleBuilder {
     public void constructVehicle(VehicleFactory factory, String trim, String paint, String wheels) {
         Vehicle vehicle = factory.createVehicle();
@@ -106,7 +130,7 @@ class VehicleBuilder {
     }
 }
 
-// Singleton Pattern: Configuration Manager
+// The following code is for singleton pattern
 class ConfigurationManager {
     private static ConfigurationManager instance;
     private ConfigurationManager() {}
@@ -121,23 +145,23 @@ class ConfigurationManager {
 
 public class Main {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);// using scanner class to take input from the user
         VehicleBuilder builder = new VehicleBuilder();
         ConfigurationManager configManager = ConfigurationManager.getInstance();
 
-        // Selecting Tata car model
-        System.out.println("Select Tata car model (Altroz/Nexon/Tiago):");
+        // Selecting which car model user wants
+        System.out.println("Select Tata car model (Altroz/Nexon/Tiago/Harrier):");
         String model = scanner.nextLine();
 
-        // Taking input from user for configuration
-        System.out.println("Enter trim (Base/Plus/Premium):");
+        // Taking configuration for the car from the user as an input
+        System.out.println("Enter trim (Base/Plus/Premium/Premium Plus):");
         String trim = scanner.nextLine();
-        System.out.println("Enter paint (White/Black/Silver):");
+        System.out.println("Enter paint (White/Black/Silver/Grey):");
         String paint = scanner.nextLine();
-        System.out.println("Enter wheels (Standard/Alloy/Sport):");
+        System.out.println("Enter wheels (Standard/Alloy/Sport/Steel):");
         String wheels = scanner.nextLine();
 
-        // Creating Tata vehicle using Builder pattern
+        // using builder pattern creating a tata car model
         VehicleFactory factory = new TataFactory(model);
         builder.constructVehicle(factory, trim, paint, wheels);
 
